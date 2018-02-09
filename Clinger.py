@@ -115,6 +115,9 @@ class Clinger:
             self.do_chat()
 
     def selector(self):
+        action = ActionChains(self.driver)
+        action.send_keys(Keys.ESCAPE)
+        action.perform()
         search_box = self.driver.find_element_by_xpath('//input[@placeholder="Search Messenger"]')
         # chatterers = []
         tries = 3
@@ -308,18 +311,18 @@ class Clinger:
                 print(" "*13, end="\r")
                 continue
             elif typed == ";":
-                reply = input("Enter your message:")
+                reply = input("Enter your message: ")
+                time.sleep(1)
                 print("\x1b[1A\x1b[2K", end="")
-                if not self.driver.current_url.endswith("#"):
-                    self.driver.get(self.driver.current_url+"#")
+
                 try:
                     elem = WebDriverWait(self.driver, 5).until(
                         EC.presence_of_element_located((By.XPATH, "//div[contains(@class,\"_1mf _1mj\")]"))
                     )
                     elem.click()
                 except Exception as e:
-                    print(e)
                     pass
+
                 action = ActionChains(self.driver)
                 action.send_keys(reply+Keys.ENTER)
                 action.perform()
@@ -339,5 +342,11 @@ chrome_options.add_argument("--window-size=1920, 1080")
 print("Opening up Clinger...")
 driver = webdriver.Chrome(executable_path="./chromedriver",
                           chrome_options=chrome_options)
-obj = Clinger(driver)
-driver.close()
+
+try:
+    obj = Clinger(driver)
+except Exception as e:
+    print(e)
+finally:
+    print("Should be closed!")
+    driver.close()
