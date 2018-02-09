@@ -312,7 +312,6 @@ class Clinger:
                 continue
             elif typed == ";":
                 reply = input("Enter your message: ")
-                time.sleep(1)
                 print("\x1b[1A\x1b[2K", end="")
 
                 try:
